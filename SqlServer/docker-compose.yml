@@ -1,0 +1,33 @@
+services:
+  databaseSqlserver:
+    image: mcr.microsoft.com/mssql/server
+    restart: always
+    shm_size: 128mb
+    ports:
+      - 1433:1433
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "1234Admin"
+    networks:
+      - labmedical
+
+  sqlpad:
+    image: sqlpad/sqlpad:latest
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - labmedical
+    environment:
+      SQLPAD_ADMIN: "admin"
+      SQLPAD_ADMIN_PASSWORD: "admin"
+      SQLPAD_DB_PATH: "/var/lib/sqlpad"
+    volumes:
+      - sqlpad-data:/var/lib/sqlpad
+
+networks:
+  labmedical:
+    driver: bridge
+
+volumes:
+  sqlpad-data:

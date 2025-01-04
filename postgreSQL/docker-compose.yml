@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  db:
+  database:
     image: postgres
     restart: always
     shm_size: 128mb
@@ -9,9 +9,30 @@ services:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: example 
+    networks:
+      - labmedical
 
-  adminer:
+  http-pgadmin:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+    networks:
+      - labmedical
+
+  # spring:
+  #   # image: labmedical:0.7
+  #   image: pliniopvv/qcode-labmedical-home:1.2
+  #   restart: always
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/labmedical
+  #     SPRING_DATASOURCE_USERNAME: postgres
+  #     SPRING_DATASOURCE_PASSWORD: example
+  #   ports:
+  #     - 80:8081
+  #   networks:
+  #     - labmedical
+
+networks:
+  labmedical:
+    driver: bridge
